@@ -16,6 +16,8 @@
 :root {
   --color: #61b752;
   --failed: #d33232;
+  --white: #fff;
+  --black: #000;
 }
 
 /* StyleSheet */
@@ -72,6 +74,28 @@ form input::placeholder {
   font-weight: bold;
   letter-spacing: 1px;
 }
+form .icon {
+  padding-left: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mail-icon {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+.mail-icon .mail-path {
+  fill: var(--color);
+  stroke: var(--color);
+}
+.send-icon {
+  width: 2.8rem;
+  height: 2.8rem;
+}
+.send-icon .send-path {
+  fill: var(--white);
+  stroke: var(--color);
+}
 form button {
   background: var(--color);
   border: none;
@@ -79,6 +103,10 @@ form button {
   height: 6rem;
   width: 10rem;
   cursor: pointer;
+}
+form button:hover {
+  background-color: var(--black);
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 /* span */
 span {
