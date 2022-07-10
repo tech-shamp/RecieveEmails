@@ -5,7 +5,8 @@
 }
 @font-face {
   font-family: "Regular";
-  src: url("fonts/Raleway-Regular.ttf");
+  /* src: url("fonts/Raleway-Regular.ttf"); */
+  src: url("fonts/Mont.woff2") format("woff2");
 }
 @font-face {
   font-family: "Light";
