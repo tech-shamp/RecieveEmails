@@ -8,9 +8,9 @@
 - Rename it `Email Subscribers`. Or whatever, it doesn't matter.
 - Put the following headers into the first row:
 
-|   |     A     |   B   | C | ... |
-|---|:---------:|:-----:|:-:|:---:|
-| 1 | timestamp | email |   |     |
+|     |  A   |   B   |  C  | ... |
+| --- | :--: | :---: | :-: | :-: |
+| 1   | Name | Email |     |     |
 
 > To learn how to add additional input fields, [checkout section 7 below](#7-adding-additional-form-data).
 
@@ -22,49 +22,45 @@
 - Paste the following script in it's place and `File > Save`:
 
 ```js
-var sheetName = 'Sheet1'
-var scriptProp = PropertiesService.getScriptProperties()
+var sheetName = "Sheet1";
+var scriptProp = PropertiesService.getScriptProperties();
 
-function intialSetup () {
-  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet()
-  scriptProp.setProperty('key', activeSpreadsheet.getId())
+function intialSetup() {
+  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  scriptProp.setProperty("key", activeSpreadsheet.getId());
 }
 
-function doPost (e) {
-  var lock = LockService.getScriptLock()
-  lock.tryLock(10000)
+function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
 
   try {
-    var doc = SpreadsheetApp.openById(scriptProp.getProperty('key'))
-    var sheet = doc.getSheetByName(sheetName)
+    var doc = SpreadsheetApp.openById(scriptProp.getProperty("key"));
+    var sheet = doc.getSheetByName(sheetName);
 
-    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]
-    var nextRow = sheet.getLastRow() + 1
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    var nextRow = sheet.getLastRow() + 1;
 
-    var newRow = headers.map(function(header) {
-      return header === 'timestamp' ? new Date() : e.parameter[header]
-    })
+    var newRow = headers.map(function (header) {
+      return header === "timestamp" ? new Date() : e.parameter[header];
+    });
 
-    sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow])
+    sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow]);
 
-    return ContentService
-      .createTextOutput(JSON.stringify({ 'result': 'success', 'row': nextRow }))
-      .setMimeType(ContentService.MimeType.JSON)
-  }
-
-  catch (e) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ 'result': 'error', 'error': e }))
-      .setMimeType(ContentService.MimeType.JSON)
-  }
-
-  finally {
-    lock.releaseLock()
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: "success", row: nextRow }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  } catch (e) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: "error", error: e }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
   }
 }
 ```
 
-> If you want to better understand what this script is doing, checkout the [`form-script-commented.js`](https://github.com/jamiewilson/form-to-google-sheets/blob/master/form-script-commented.js) file in the repo for a detailed explanation. 
+> If you want to better understand what this script is doing, checkout the [`form-script-commented.js`](https://github.com/jamiewilson/form-to-google-sheets/blob/master/form-script-commented.js) file in the repo for a detailed explanation.
 
 ## 3. Run the setup function
 
@@ -74,9 +70,10 @@ function doPost (e) {
 - You should see a dialog that says `Hi {Your Name}`, `Submit Form to Google Sheets wants to`...
 - Click `Allow`
 
-## 4. Add a new project trigger 
-- Click on `Edit > Current project’s triggers`. 
-- In the dialog click `No triggers set up. Click here to add one now.` 
+## 4. Add a new project trigger
+
+- Click on `Edit > Current project’s triggers`.
+- In the dialog click `No triggers set up. Click here to add one now.`
 - In the dropdowns select `doPost`
 - Set the events fields to `From spreadsheet` and `On form submit`
 - Then click `Save`
@@ -118,29 +115,31 @@ Open the file named `index.html`. On line 12 replace `<SCRIPT URL>` with your sc
 
 As you can see, this script uses the the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), a fairly new promise-based mechanism for making web requests. It makes a "POST" request to your script URL and uses [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) to pass in our data as URL paramters.
 
-Because Fetch and FormData aren't fully supported, you'll likely want to include their respective polyfills. [See section #8](#8-related-polyfills). 
+Because Fetch and FormData aren't fully supported, you'll likely want to include their respective polyfills. [See section #8](#8-related-polyfills).
 
 > **Fun fact!** The `<html>`, `<head>`, and `body` tags are actually among a handful of optional tags, but since the [rules around how the browser parses a page are kinda complicated](https://www.w3.org/TR/2011/WD-html5-20110525/syntax.html#optional-tags), you'd probably not want to omit them on real websites.
 
 ## 7. Adding additional form data
+
 To capture additional data, you'll just need to create new columns with titles matching exactly the `name` values from your form inputs. For example, if you want to add first and last name inputs, you'd give them `name` values like so:
 
 ```html
 <form name="submit-to-google-sheet">
-  <input name="email" type="email" placeholder="Email" required>
-  <input name="firstName" type="text" placeholder="First Name">
-  <input name="lastName" type="text" placeholder="Last Name">
+  <input name="email" type="email" placeholder="Email" required />
+  <input name="firstName" type="text" placeholder="First Name" />
+  <input name="lastName" type="text" placeholder="Last Name" />
   <button type="submit">Send</button>
 </form>
 ```
 
 Then create new headers with the exact, case-sensitive `name` values:
 
-|   |     A     |   B   |     C     |     D    | ... |
-|---|:---------:|:-----:|:---------:|:--------:|:---:|
-| 1 | timestamp | email | firstName | lastName |     |
+|     |     A     |   B   |     C     |    D     | ... |
+| --- | :-------: | :---: | :-------: | :------: | :-: |
+| 1   | timestamp | email | firstName | lastName |     |
 
 ## 8. Related Polyfills
+
 Some of this stuff is not yet fully supported by browsers or doesn't work on older ones. Here are some polyfill options to use for better support.
 
 - [Promise Polyfill](https://github.com/taylorhakes/promise-polyfill)
@@ -164,9 +163,11 @@ You'll want to make sure these load before the main script handling the form sub
 ```
 
 # Have feedback/requests/issues?
+
 Please [create a new issue](https://github.com/jamiewilson/form-to-google-sheet/issues). PRs are definitely welcome, but please run your ideas by me before putting in a lot of work. Thanks!
 
 #### Related/Inspirational Articles
+
 - [Google Spreadsheets as a Database – INSERT with Apps Script form POST/GET submit method](https://mashe.hawksey.info/2011/10/google-spreadsheets-as-a-database-insert-with-apps-script-form-postget-submit-method/)
 - [Step by step setup to send form data to Google Sheets](http://railsrescue.com/blog/2015-05-28-step-by-step-setup-to-send-form-data-to-google-sheets/)
 - [Google Sheet Form Post](https://gist.github.com/willpatera/ee41ae374d3c9839c2d6)
@@ -174,6 +175,7 @@ Please [create a new issue](https://github.com/jamiewilson/form-to-google-sheet/
 - [Send Email from a Static HTML Form using Google Apps Mail!](https://github.com/dwyl/html-form-send-email-via-google-script-without-server)
 
 #### Documentation
+
 - [Google Apps Script](https://developers.google.com/apps-script/)
 - [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 - [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)

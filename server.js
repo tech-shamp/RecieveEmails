@@ -1,3 +1,4 @@
+const { application } = require("express");
 const express = require("express");
 const path = require("path");
 
@@ -10,5 +11,8 @@ app.use(express.static(dirPath));
 app.get("/", (req, res) => {
   res.sendFile(path.join(dirPath, "index.html"));
 });
+app.get("/home", (req, res) => {
+  res.sendFile(path.join(dirPath, "maintain.html"));
+});
 
-app.listen(port, console.log("listening......"));
+app.listen(port, console.log(`listening....... ${port}`));
