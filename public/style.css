@@ -106,7 +106,7 @@ form button {
 }
 form button:hover {
   background-color: var(--black);
-  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all 0.5s;
 }
 /* span */
 span {
