@@ -14,8 +14,8 @@
 
 /* Root */
 :root {
-  --color: #61b752;
-  --failed: #d33232;
+  --green: #61b752;
+  --red: #d33232;
   --white: #fff;
   --black: #000;
 }
@@ -85,8 +85,8 @@ form .icon {
   height: 2.2rem;
 }
 .mail-icon .mail-path {
-  fill: var(--color);
-  stroke: var(--color);
+  fill: var(--green);
+  stroke: var(--green);
 }
 .send-icon {
   width: 2.8rem;
@@ -94,10 +94,10 @@ form .icon {
 }
 .send-icon .send-path {
   fill: var(--white);
-  stroke: var(--color);
+  stroke: var(--green);
 }
 form button {
-  background: var(--color);
+  background: var(--green);
   border: none;
   outline: none;
   height: 6rem;
@@ -114,8 +114,8 @@ span {
   display: block;
 }
 .success {
-  color: var(--color);
+  color: var(--green);
 }
 .failed {
-  color: var(--failed);
+  color: var(--red);
 }
